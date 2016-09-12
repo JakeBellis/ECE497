@@ -1,4 +1,4 @@
-﻿Etch – A – Sketch with Button Input:
+Etch – A – Sketch with Button Input:
 
 When the program starts, cursor starts in top left corner.
  
@@ -13,3 +13,10 @@ Functionality to Add
 	-Basic Graphics
 	-Better behavior on startup
 	-debounce on button presses
+
+==========
+Comments from Prof. Yoder
+
+Appears to work fine.
+
+Grade:  10/10
