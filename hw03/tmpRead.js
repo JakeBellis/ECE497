@@ -8,7 +8,7 @@ var tmpSens2 = 0x49;
 var TEMP_ADDRESS = 0; //useful addresses for TMP101 Sensors
 var CONFIG_REG = 1;
 var TMP_ALARM_HIGH = 2;
-var TMP_ALARM_LOW = 3;
+var TMP_ALARM_HIGH = 3;
 
 
 var tmp1wire = new i2c(tmpSens1, {
@@ -23,6 +23,18 @@ var tmpOut1 = tmp1wire.readBytes(TEMP_ADDRESS, 2, function(err){});
 var tmpOut2 = tmp2wire.readBytes(TEMP_ADDRESS, 2, function(err){});
 
 
-console.log((tmpOut1[0]*1.8)+32);
-console.log((tmpOut2[0]*1.8)+32);
+convertTemp(tmpOut1);
+convertTemp(tmpOut2);
+
+function convertTemp(tempBuffer){
+    var fracTemp = ((tempBuffer[1] >> 7) & 0x01)*0.5 + 
+                   ((tempBuffer[1] >> 6) & 0x01)*0.25 +
+                   ((tempBuffer[1] >> 5) & 0x01)*0.125 +
+                   ((tempBuffer[1] >> 4) & 0x01)*0.0625;
+                   
+    var tempC = tempBuffer[0] + fracTemp;
+    var tempF = (tempC*1.8)+32;
+    
+    console.log("%d degrees Fahrenheit", tempF.toFixed(1));
+}
 
