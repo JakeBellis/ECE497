@@ -1,13 +1,13 @@
 #!/bin/bash
 
 #sets up TMP101 sensors to produce a highly accurate output and ALERT values
-i2cset -y 2 0x48 01 0x64
-i2cset -y 2 0x49 01 0x64
+i2cset -y 2 0x48 01 0x60
+i2cset -y 2 0x49 01 0x60
 
 temp1=`i2cget -y 2 0x48 00`
 temp2=`i2cget -y 2 0x49 00`
 
-
+#makes alert values close to initial temperature
 t1LOW=$(($temp1+2))
 t1HIGH=$(($temp1+3))
 

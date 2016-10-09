@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
+//set up gpio
+var bs = require('bonescript');
+tempAlarm1 = 'P9_41'; tempAlarm2 = 'P9_42';
+bs.pinMode(tempAlarm1, bs.INPUT, 7, 'pullup');
+bs.pinMode(tempAlarm2, bs.INPUT, 7, 'pullup');
+
+
+
 var i2c = require('i2c');
 var bus = '/dev/i2c-2';
 var tmpSens1 = 0x48;
@@ -19,12 +27,20 @@ var tmp2wire = new i2c(tmpSens2, {
     device: bus
 });
 
-var tmpOut1 = tmp1wire.readBytes(TEMP_ADDRESS, 2, function(err){});
-var tmpOut2 = tmp2wire.readBytes(TEMP_ADDRESS, 2, function(err){});
+bs.attachInterrupt(tempAlarm1, true, bs.FALLING, outputTemp);
+bs.attachInterrupt(tempAlarm2, true, bs.FALLING, outputTemp);
 
 
-convertTemp(tmpOut1);
-convertTemp(tmpOut2);
+function outputTemp(){
+    
+    var tmpOut1 = tmp1wire.readBytes(TEMP_ADDRESS, 2, function(err){});
+    var tmpOut2 = tmp2wire.readBytes(TEMP_ADDRESS, 2, function(err){});
+    
+    console.log("Temp Sensor at Address 0x48:");
+    convertTemp(tmpOut1);
+    console.log("Temp Sensor at Address 0x49:");
+    convertTemp(tmpOut2);
+}
 
 function convertTemp(tempBuffer){
     var fracTemp = ((tempBuffer[1] >> 7) & 0x01)*0.5 + 
