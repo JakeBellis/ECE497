@@ -40,6 +40,7 @@ function outputTemp(){
     convertTemp(tmpOut1);
     console.log("Temp Sensor at Address 0x49:");
     convertTemp(tmpOut2);
+    console.log("\n");
 }
 
 function convertTemp(tempBuffer){
