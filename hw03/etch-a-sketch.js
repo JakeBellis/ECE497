@@ -33,13 +33,13 @@ for(var i = 0; i < hexColumns.length; i++){  //set up clear board
     hexColumns[i] = 0x00;
 }
 
-var upButton = 'P9_13', downButton = 'P9_15', leftButton = 'P9_17',
+var upButton = 'P9_13', downButton = 'P9_16', leftButton = 'P9_17',
     rightButton = 'P9_23', clearButton = 'P9_27';
 
 var buttons = [upButton, downButton, leftButton, rightButton, clearButton];
 
 for(var i = 0; i < buttons.length; i++){
-    bs.pinMode(buttons[i], bs.INPUT, 7, 'pullup');
+    bs.pinMode(buttons[i], bs.INPUT, 7, 'pulldown');
 }
 
 bs.attachInterrupt(downButton, true, bs.RISING, downInterrupt);
@@ -57,11 +57,12 @@ bs.attachInterrupt(clearButton, true, bs.RISING, clearInterrupt);
 console.log('Press Button to draw');
 
 function downInterrupt(){
+    //console.log("down interrupt");
      if (cursorY === easHeight - 1) {}
      else{
         cursorY++;
         hexRow = 2*cursorY;
-        hexColumns[cursorY] = hexColumns[cursorY] || (0x01 << cursorX);
+        hexColumns[cursorY] = hexColumns[cursorY] | (0x01 << cursorX);
         // console.log(hexRow);
         // console.log(hexColumns[cursorY]);
         // console.log(cursorY);
@@ -74,42 +75,54 @@ function downInterrupt(){
 }
 
 function upInterrupt(){
+    //console.log("up interrupt")
      if (cursorY === 0) {}
      else{
+        cursorY--; 
         hexRow = 2*cursorY;
-        hexColumns[cursorY] = hexColumns[cursorY] || (0x01 << cursorX);
+        hexColumns[cursorY] = hexColumns[cursorY] | (0x01 << cursorX);
     }
     printGrid(hexRow,hexColumns[cursorY]);
 }
 
 function rightInterrupt(){
+    //console.log("right interrupt");
      if (cursorX === easWidth - 1) {}
      else{
         cursorX++;
         hexRow = 2*cursorY;
-        hexColumns[cursorY] = hexColumns[cursorY] || (0x01 << cursorX);
+        hexColumns[cursorY] = hexColumns[cursorY] | (0x01 << cursorX);
     }
     printGrid(hexRow,hexColumns[cursorY]);
 }
 
 function leftInterrupt(){
+    //console.log("left interrupt");
      if (cursorX === 0) {}
      else{
         cursorX--;
         hexRow = 2*cursorY;
-        hexColumns[cursorY] = hexColumns[cursorY] || (0x01 << cursorX);
+        hexColumns[cursorY] = hexColumns[cursorY] | (0x01 << cursorX);
+        console.log(0x01 << cursorY);
     }
     printGrid(hexRow,hexColumns[cursorY]);
 }
 
 function clearInterrupt(){
+    //console.log("clear interrupt");
+    wire.writeBytes(0x00, blank, function(err){});
 
-   wire.writeBytes(0x00, blank, function(err){});
+    for(var i = 0; i < hexColumns.length; i++){  //set up clear board
+        hexColumns[i] = 0x00;
+    }
 }
 
 
 
 function printGrid(hexRow,HexColumn) {
+    // console.log("X: " + cursorX);
+    // console.log("Y:" + cursorY);
+    // console.log(hexRow + " " + HexColumn);
     wire.writeBytes(hexRow,[HexColumn], function(err){});
 }
 
