@@ -18,7 +18,7 @@ for(var i = 0; i < easBoard.length; i++){  //set up clear board
 }
 
 var upButton = 'P9_13', downButton = 'P9_15', leftButton = 'P9_17',
-    rightButton = 'P9_23',clearButton = 'P9_31';
+    rightButton = 'P9_23', clearButton = 'P9_27';
 
 var buttons = [upButton, downButton, leftButton, rightButton, clearButton];
 
