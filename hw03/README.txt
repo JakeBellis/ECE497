@@ -11,3 +11,11 @@ Prints the current temperature to start.  Prints the temperature on both TMP101 
 Etch-a-Sketch.js
 
 Uses an 8x8 Bi-Color LED matrix along with 5 buttons to play an etch-a-sketch game on the LED matrix.  Functions of buttons are up, down, left, right, and clear from top to bottom.
+
+==========
+Comments from Prof. Yoder
+Looks like you have it working.
+
+Late: -2
+
+Grade:  8/10
